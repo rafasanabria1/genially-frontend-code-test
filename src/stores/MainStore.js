@@ -14,13 +14,16 @@ const MainStore = types
       removeBox() {
         if (self.boxes.length <= 0) return
         self.boxes.pop ()
+      },
+      changeColorToSelectedBoxes (color) {
+        self.selectedBoxes.map (box => box.changeColor (color))
       }
     };
   })
   .views(self => {
     return {
         get selectedBoxes () {
-            return self.boxes.filter (box => box.selected).length
+            return self.boxes.filter (box => box.selected)
         }
     }
   });

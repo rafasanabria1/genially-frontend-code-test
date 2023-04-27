@@ -15,6 +15,10 @@ const BoxModel = types
   .actions(self => ({
     toggleSelected () {
         self.selected = !self.selected
+    },
+    changeColor (color) {
+        if (! color.match (/^#[0-9A-F]{6}$/i)) return;
+        self.color = color
     }
   }));
 

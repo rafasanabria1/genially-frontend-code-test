@@ -9,6 +9,10 @@ function Toolbar({store}) {
         store.addBox (newBox)
     }
 
+    const handleChangeColor = (e) => {
+        store.changeColorToSelectedBoxes (e.target.value)
+    }
+    
     const handleRemoveBox = () => {
         store.removeBox ()
     }
@@ -17,10 +21,10 @@ function Toolbar({store}) {
     <div className="toolbar">
       <button onClick={handleAddBox}>Add Box</button>
       <button onClick={handleRemoveBox} disabled={store.boxes.length <= 0}>Remove Box</button>
-      <input type="color" />
+      <input type="color" onChange={handleChangeColor}/>
       <span>
         {
-            `${store.selectedBoxes <= 0 ? 'No' : store.selectedBoxes} boxes selected` 
+            `${store.selectedBoxes.length <= 0 ? 'No' : store.selectedBoxes.length} boxes selected` 
         }
         </span>
     </div>
