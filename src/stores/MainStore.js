@@ -16,7 +16,10 @@ const MainStore = types
         self.boxes.pop ()
       },
       changeColorToSelectedBoxes (color) {
-        self.selectedBoxes.map (box => box.changeColor (color))
+        self.selectedBoxes.map (box => box.setColor (color))
+      },
+      moveSelectedBoxes (dx, dy) {
+        self.selectedBoxes.map (box => box.move (dx, dy))
       }
     };
   })

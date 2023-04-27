@@ -1,21 +1,35 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { observer } from "mobx-react";
+import interact from "interactjs";
 
 function BoxDraggable(props) {
     
+    const boxRef = useRef(null)
+    
+    useEffect (() => {
+        interact (boxRef.current).draggable ({
+            listeners: {
+                move (event) {
+                    props.box.setSelected (true)
+                    props.moveSelectedBoxes (event.dx, event.dy)
+                },
+              }
+        }).on ('tap', props.box.toggleSelected)
+    }, [props])
+
   return (
     <div
       id={props.id}
       className="box"
       style={{
         backgroundColor: props.color,
-        width: props.width,
-        height: props.height,
+        width: `${props.width}px`,
+        height: `${props.height}px`,
         transform: `translate(${props.left}px, ${props.top}px)`,
-        border: props.box.selected ? 'solid 1px black' : 'none',
+        border: props.box.selected ? 'solid 2px black' : 'none',
         fontWeight: props.box.selected ? 'bold' : 'inherit'
       }}
-      onClick={props.box.toggleSelected}
+      ref={boxRef}
     >
       {props.children}
     </div>
