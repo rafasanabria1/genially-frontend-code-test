@@ -10,6 +10,10 @@ const MainStore = types
     return {
       addBox(box) {
         self.boxes.push(box);
+      },
+      removeBox() {
+        if (self.boxes.length <= 0) return
+        self.boxes.pop ()
       }
     };
   })

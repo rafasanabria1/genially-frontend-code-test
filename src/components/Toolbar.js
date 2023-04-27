@@ -5,15 +5,18 @@ import getRandomBox from "../utils/getRandom";
 function Toolbar({store}) {
 
     const handleAddBox = () => {
-
         const newBox = getRandomBox ();
         store.addBox (newBox)
+    }
+
+    const handleRemoveBox = () => {
+        store.removeBox ()
     }
 
   return (
     <div className="toolbar">
       <button onClick={handleAddBox}>Add Box</button>
-      <button>Remove Box</button>
+      <button onClick={handleRemoveBox} disabled={store.boxes.length <= 0}>Remove Box</button>
       <input type="color" />
       <span>
         {
