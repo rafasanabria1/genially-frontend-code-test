@@ -1,14 +1,19 @@
 import React from "react";
+import { observer } from "mobx-react";
 
-function Toolbar() {
+function Toolbar({store}) {
   return (
     <div className="toolbar">
       <button>Add Box</button>
       <button>Remove Box</button>
       <input type="color" />
-      <span>No boxes selected</span>
+      <span>
+        {
+            `${store.selectedBoxes <= 0 ? 'No' : store.selectedBoxes} boxes selected` 
+        }
+        </span>
     </div>
   );
 }
 
-export default Toolbar;
+export default observer(Toolbar);

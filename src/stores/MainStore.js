@@ -13,7 +13,13 @@ const MainStore = types
       }
     };
   })
-  .views(self => ({}));
+  .views(self => {
+    return {
+        get selectedBoxes () {
+            return self.boxes.filter (box => box.selected).length
+        }
+    }
+  });
 
 const store = MainStore.create();
 
