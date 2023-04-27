@@ -8,3 +8,5 @@ export const SIZES = {
         WIDTH: 1200
     }
 }
+
+export const LOCALSTORAGE_ITEM_NAME = 'genially-store'

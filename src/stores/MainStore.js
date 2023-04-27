@@ -1,6 +1,7 @@
-import { types } from "mobx-state-tree";
+import { onSnapshot, types } from "mobx-state-tree";
 import BoxModel from "./models/Box";
 import getRandomBox from "../utils/getRandom";
+import { LOCALSTORAGE_ITEM_NAME } from "../utils/const";
 
 const MainStore = types
   .model("MainStore", {
@@ -31,10 +32,18 @@ const MainStore = types
     }
   });
 
-const store = MainStore.create();
+  let store = null
+  if (localStorage.getItem (LOCALSTORAGE_ITEM_NAME)) {
+    const initialState = JSON.parse (localStorage.getItem (LOCALSTORAGE_ITEM_NAME))
+    store = MainStore.create (initialState)
+  } else {
+    store = MainStore.create ()
+    const box1 = getRandomBox ();
+    store.addBox(box1);
+  }
 
-const box1 = getRandomBox ();
-
-store.addBox(box1);
+  onSnapshot (store, snapshot => {
+    localStorage.setItem (LOCALSTORAGE_ITEM_NAME, JSON.stringify (snapshot))
+  })
 
 export default store;
