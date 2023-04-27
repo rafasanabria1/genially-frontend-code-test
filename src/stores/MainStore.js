@@ -2,12 +2,17 @@ import { onSnapshot, types } from "mobx-state-tree";
 import BoxModel from "./models/Box";
 import getRandomBox from "../utils/getRandom";
 import { LOCALSTORAGE_ITEM_NAME } from "../utils/const";
+import { UndoManager } from "mst-middlewares"
 
 const MainStore = types
   .model("MainStore", {
-    boxes: types.array(BoxModel)
+    boxes: types.array(BoxModel),
+    history: types.optional (UndoManager, {})
   })
   .actions(self => {
+
+    setHistoryManager (self)
+
     return {
       addBox(box) {
         self.boxes.push(box);
@@ -31,6 +36,11 @@ const MainStore = types
         }
     }
   });
+
+  export let historyManager = {}
+  const setHistoryManager = (store) => {
+      historyManager = store.history
+  }
 
   let store = null
   if (localStorage.getItem (LOCALSTORAGE_ITEM_NAME)) {
