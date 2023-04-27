@@ -33,7 +33,7 @@ When finished, the app should let the user:
 - ✅ Changing a box's color.
 - ✅ Display a counter indicating how many boxes are selected.
 - ✅ Support selection, dragging and color changing for multiple boxes.
-- Save the state of the app locally and restore it when it loads.
+- ✅ Save the state of the app locally and restore it when it loads.
 - Undo / Redo capabilities
   - **hint**: mobx-state-tree provides a middleware for this.
 
