@@ -28,11 +28,11 @@ When finished, the app should let the user:
 
 - ✅ Add and remove boxes.
 - ✅ Select a box, which should visually indicate that is selected
-- Drag the boxes around using interact.js and using React refs.
-  - Keep in mind you should be able to drag a box even if it's not selected when the dragging starts.
+- ✅ Drag the boxes around using interact.js and using React refs.
+  - ✅ Keep in mind you should be able to drag a box even if it's not selected when the dragging starts.
 - ✅ Changing a box's color.
 - ✅ Display a counter indicating how many boxes are selected.
-- Support selection, dragging and color changing for multiple boxes.
+- ✅ Support selection, dragging and color changing for multiple boxes.
 - Save the state of the app locally and restore it when it loads.
 - Undo / Redo capabilities
   - **hint**: mobx-state-tree provides a middleware for this.
