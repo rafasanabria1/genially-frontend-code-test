@@ -4,7 +4,7 @@ import getRandomBox from "../utils/getRandom";
 import { LOCALSTORAGE_ITEM_NAME } from "../utils/const";
 import { UndoManager } from "mst-middlewares"
 
-const MainStore = types
+export const MainStore = types
   .model("MainStore", {
     boxes: types.array(BoxModel),
     history: types.optional (UndoManager, {})
