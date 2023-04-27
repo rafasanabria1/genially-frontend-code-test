@@ -1,10 +1,18 @@
 import React from "react";
 import { observer } from "mobx-react";
+import getRandomBox from "../utils/getRandom";
 
 function Toolbar({store}) {
+
+    const handleAddBox = () => {
+
+        const newBox = getRandomBox ();
+        store.addBox (newBox)
+    }
+
   return (
     <div className="toolbar">
-      <button>Add Box</button>
+      <button onClick={handleAddBox}>Add Box</button>
       <button>Remove Box</button>
       <input type="color" />
       <span>

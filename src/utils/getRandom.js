@@ -1,5 +1,6 @@
 import BoxModel from "../stores/models/Box";
 import uuid from "uuid/v4";
+import { SIZES } from "./const";
 
 const getRandomColor = () => {
   const letters = "0123456789ABCDEF";
@@ -10,13 +11,19 @@ const getRandomColor = () => {
   return color;
 };
 
+
+const getRandomNumber = (min, max) => {
+
+    return Math.floor(Math.random() * (max - min) ) + min;
+}
+
 const getRandomBox = () => {
 
     return BoxModel.create({
         id: uuid(),
         color: getRandomColor(),
-        left: 0,
-        top: 0
+        left: getRandomNumber (0, SIZES.CANVA.WIDTH - SIZES.BOX.WIDTH),
+        top: getRandomNumber (0, SIZES.CANVA.HEIGHT - SIZES.BOX.HEIGHT)
       });
 }
 

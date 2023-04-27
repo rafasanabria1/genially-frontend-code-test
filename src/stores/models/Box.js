@@ -1,13 +1,14 @@
 import { types } from "mobx-state-tree";
+import { SIZES } from "../../utils/const";
 
 const BoxModel = types
   .model("Box", {
     id: types.identifier,
-    width: 200,
-    height: 100,
+    width: SIZES.BOX.WIDTH,
+    height: SIZES.BOX.HEIGHT,
     color: "#FFF000",
-    left: 200,
-    top: 100,
+    left: 0,
+    top: 0,
     selected: false
   })
   .views(self => ({}))
