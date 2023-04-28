@@ -11,6 +11,7 @@ export const MainStore = types
   })
   .actions(self => {
 
+    const historyManager = self.history
     return {
       addBox(box) {
         self.boxes.push(box);
