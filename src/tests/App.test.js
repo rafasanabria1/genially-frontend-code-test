@@ -230,6 +230,7 @@ describe ('Write/Read to localStorage', () => {
 describe ('Undo/Redo capabilities', () => {
 
     const box1 = getRandomBox ()
+    const box1Id = box1.id
     const box2 = getRandomBox ()
     const store = MainStore.create ()
     const historyManager = store.history
@@ -259,7 +260,7 @@ describe ('Undo/Redo capabilities', () => {
         historyManager.redo ()
 
         expect (store.boxes.length).toBe (2)
-        expect (store.boxes[1].id).toBe (box1.id)
+        expect (store.boxes[1].id).toBe (box1Id)
     })
 
     test ('Check undo change color', () => {
