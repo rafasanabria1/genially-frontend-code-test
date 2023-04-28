@@ -11,8 +11,10 @@ export const MainStore = types
   })
   .actions(self => {
 
-    const historyManager = self.history
     return {
+      afterCreate () {
+          self.history.withoutUndo (() => {})
+      },
       addBox(box) {
         self.boxes.push(box);
       },
