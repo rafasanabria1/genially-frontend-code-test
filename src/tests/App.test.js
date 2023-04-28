@@ -4,6 +4,7 @@ import App from "../components/App";
 import getRandomBox from "../utils/getRandom";
 import { MainStore } from "../stores/MainStore"
 import { SIZES } from "../utils/const";
+import { getSnapshot, onSnapshot } from "mobx-state-tree";
 
 test("Renders correctly the app", () => {
   const div = document.createElement("div");
@@ -28,7 +29,6 @@ describe ('Add random box', () => {
     })
 })
 
-
 describe ('Remove last box added', () => {
     
     const store = MainStore.create ()  
@@ -49,7 +49,6 @@ describe ('Remove last box added', () => {
         expect (store.boxes[store.boxes.length - 1].id).toBe (box2.id);
     })
 })
-
 
 describe ('Toggle selected in box', () => {
     const box = getRandomBox ();
@@ -151,37 +150,149 @@ describe ('Change color & move boxes', () => {
 })
 
 
-/*
 describe ('Write/Read to localStorage', () => {
     
     const box1 = getRandomBox ()
     const box2 = getRandomBox ()
-    const box3 = getRandomBox ()
     const store = MainStore.create ()
+    const localStorageItemName = 'test-wr-genially'
+    
+    const previousColor = box1.color;
+    const newColor = '#FF0000'
 
+    const previousLeft = box1.left
+    const previousTop = box1.top
+    const dx = 15
+    const dy = 20
+    const newLeft = Math.max (0, (Math.min (previousLeft + dx, (SIZES.CANVA.WIDTH - SIZES.BOX.WIDTH))))
+    const newTop = Math.max (0, (Math.min (previousTop + dy, (SIZES.CANVA.HEIGHT - SIZES.BOX.HEIGHT))))
+
+
+    const json1 = JSON.stringify ({"boxes":[{...box1}],"history":{"history":[{"patches":[{"op":"add","path":"/boxes/0","value":{...box1}}],"inversePatches":[{"op":"remove","path":"/boxes/0"}]}],"undoIdx":1}})
+    const json2 = JSON.stringify ({"boxes":[{...box1},{...box2}],"history":{"history":[{"patches":[{"op":"add","path":"/boxes/0","value":{...box1}}],"inversePatches":[{"op":"remove","path":"/boxes/0"}]},{"patches":[{"op":"add","path":"/boxes/1","value":{...box2}}],"inversePatches":[{"op":"remove","path":"/boxes/1"}]}],"undoIdx":2}})
+    const json3 = JSON.stringify ({"boxes":[{...box1}],"history":{"history":[{"patches":[{"op":"add","path":"/boxes/0","value":{...box1}}],"inversePatches":[{"op":"remove","path":"/boxes/0"}]},{"patches":[{"op":"add","path":"/boxes/1","value":{...box2}}],"inversePatches":[{"op":"remove","path":"/boxes/1"}]},{"patches":[{"op":"remove","path":"/boxes/1"}],"inversePatches":[{"op":"add","path":"/boxes/1","value":{...box2}}]}],"undoIdx":3}})
+    const json4 = JSON.stringify ({"boxes":[{...box1, selected: true, color: newColor}],"history":{"history":[{"patches":[{"op":"add","path":"/boxes/0","value":{...box1}}],"inversePatches":[{"op":"remove","path":"/boxes/0"}]},{"patches":[{"op":"add","path":"/boxes/1","value":{...box2}}],"inversePatches":[{"op":"remove","path":"/boxes/1"}]},{"patches":[{"op":"remove","path":"/boxes/1"}],"inversePatches":[{"op":"add","path":"/boxes/1","value":{...box2}}]},{"patches":[{"op":"replace","path":"/boxes/0/selected","value":true}],"inversePatches":[{"op":"replace","path":"/boxes/0/selected","value":false}]},{"patches":[{"op":"replace","path":"/boxes/0/color","value":newColor}],"inversePatches":[{"op":"replace","path":"/boxes/0/color","value":previousColor}]}],"undoIdx":5}})
+    const json5 = JSON.stringify ({"boxes":[{...box1, selected: true, color: newColor, left: newLeft, top: newTop}],"history":{"history":[{"patches":[{"op":"add","path":"/boxes/0","value":{...box1}}],"inversePatches":[{"op":"remove","path":"/boxes/0"}]},{"patches":[{"op":"add","path":"/boxes/1","value":{...box2}}],"inversePatches":[{"op":"remove","path":"/boxes/1"}]},{"patches":[{"op":"remove","path":"/boxes/1"}],"inversePatches":[{"op":"add","path":"/boxes/1","value":{...box2}}]},{"patches":[{"op":"replace","path":"/boxes/0/selected","value":true}],"inversePatches":[{"op":"replace","path":"/boxes/0/selected","value":false}]},{"patches":[{"op":"replace","path":"/boxes/0/color","value":newColor}],"inversePatches":[{"op":"replace","path":"/boxes/0/color","value":previousColor}]},{"patches":[{"op":"replace","path":"/boxes/0/left","value":newLeft},{"op":"replace","path":"/boxes/0/top","value":newTop}],"inversePatches":[{"op":"replace","path":"/boxes/0/left","value":previousLeft},{"op":"replace","path":"/boxes/0/top","value":previousTop}]}],"undoIdx":6}})
+
+    onSnapshot (store, snapshot => {
+        localStorage.setItem (localStorageItemName, JSON.stringify (snapshot))
+    })
 
     test ('Check write when adding box', () => {
 
-    })
+        store.addBox (box1)
+        const read1 = localStorage.getItem (localStorageItemName)
+        
+        expect (read1).toBe (json1)
+        
+        store.addBox (box2)
+        const read2 = localStorage.getItem (localStorageItemName)
 
+        expect (read2).toBe (json2)
+    })
+    
     test ('Check write when removing box', () => {
         
+        store.removeBox ()
+        const read3 = localStorage.getItem (localStorageItemName)
+        
+        expect (read3).toBe (json3)
     })
 
-    test ('Check write when changin color to box', () => {
+    test ('Check write when changing color to box', () => {
         
+        box1.setSelected (true)
+        store.changeColorToSelectedBoxes (newColor)
+        const read4 = localStorage.getItem (localStorageItemName)
+        
+        expect (read4).toBe (json4)
     })
 
     test ('Check write when moving box', () => {
         
+        store.moveSelectedBoxes (dx, dy)
+        const read5 = localStorage.getItem (localStorageItemName)
+        
+        expect (read5).toBe (json5)
     })
 
     test ('Check read from localStorage to restore previous state', () => {
         
+        const read6 = localStorage.getItem (localStorageItemName)
+        const storeRestored = MainStore.create (JSON.parse(read6))
+
+        expect (read6).toBe (JSON.stringify (getSnapshot (storeRestored)))
     })
+
+    localStorage.removeItem (localStorageItemName)
 })
 
-test ('Undo/Redo capabilities', () => {
-    return false
+describe ('Undo/Redo capabilities', () => {
+
+    const box1 = getRandomBox ()
+    const box2 = getRandomBox ()
+    const store = MainStore.create ()
+    const historyManager = store.history
+    
+    const previousColor = box1.color
+    const newColor = '#FF0000'
+
+    const previousLeft = box1.left
+    const previousTop = box1.top
+    const dx = 15
+    const dy = 20
+    const newLeft = Math.max (0, (Math.min (previousLeft + dx, (SIZES.CANVA.WIDTH - SIZES.BOX.WIDTH))))
+    const newTop = Math.max (0, (Math.min (previousTop + dy, (SIZES.CANVA.HEIGHT - SIZES.BOX.HEIGHT))))
+
+    test ('Check undo add box', () => {
+
+        store.addBox (box2)
+        store.addBox (box1)
+        historyManager.undo ()
+
+        expect (store.boxes.length).toBe (1)
+        expect (store.boxes[0].id).toBe (box2.id)
+    })
+
+    test ('Check redo add box', () => {
+
+        historyManager.redo ()
+
+        expect (store.boxes.length).toBe (2)
+        expect (store.boxes[1].id).toBe (box1.id)
+    })
+
+    test ('Check undo change color', () => {
+
+        store.boxes[1].toggleSelected()
+        store.changeColorToSelectedBoxes (newColor)
+        historyManager.undo ()
+
+        expect (store.boxes[1].color).toBe (previousColor)
+    })
+
+
+    test ('Check redo change color', () => {
+
+        historyManager.redo ()
+
+        expect (store.boxes[1].color).toBe (newColor)
+    })
+
+    test ('Check undo move box', () => {
+
+        store.moveSelectedBoxes (dx, dy)
+        historyManager.undo ()
+
+        expect (store.boxes[1].left).toBe (previousLeft)
+        expect (store.boxes[1].top).toBe (previousTop)
+    })
+
+    test ('Check redo move box', () => {
+
+        historyManager.redo ()
+
+        expect (store.boxes[1].left).toBe (newLeft)
+        expect (store.boxes[1].top).toBe (newTop)
+    })
 })
-*/
