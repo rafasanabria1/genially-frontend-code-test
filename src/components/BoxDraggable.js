@@ -9,6 +9,12 @@ function BoxDraggable(props) {
     useEffect (() => {
         interact (boxRef.current).draggable ({
             listeners: {
+                start () {
+                    props.history.startGroup(() => {})
+                },
+                end () {
+                    props.history.stopGroup(() => {})
+                },
                 move (event) {
                     props.box.setSelected (true)
                     props.moveSelectedBoxes (event.dx, event.dy)

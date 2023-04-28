@@ -18,6 +18,7 @@ function Canvas({ store }) {
           height={box.height}
           box={box}
           moveSelectedBoxes={store.moveSelectedBoxes}
+          history={store.history}
         />
       ))}
     </div>
