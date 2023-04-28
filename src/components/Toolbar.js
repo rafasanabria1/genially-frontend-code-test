@@ -1,7 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
 import getRandomBox from "../utils/getRandom";
-import { historyManager } from "../stores/MainStore";
 
 function Toolbar({store}) {
 
@@ -19,13 +18,13 @@ function Toolbar({store}) {
     }
 
     const handleUndo = () => {
-        if (! historyManager.canUndo) return
-        historyManager.undo ()
+        if (! store.history.canUndo) return
+        store.history.undo ()
     }
 
     const handleRedo = () => {
-        if (! historyManager.canRedo) return
-        historyManager.redo ()
+        if (! store.history.canRedo) return
+        store.history.redo ()
     }
 
   return (
@@ -38,8 +37,8 @@ function Toolbar({store}) {
             `${store.selectedBoxes.length <= 0 ? 'No' : store.selectedBoxes.length} boxes selected` 
         }
         </span>
-        <button onClick={handleUndo} disabled={!historyManager.canUndo}>Undo</button>
-        <button onClick={handleRedo} disabled={!historyManager.canRedo}>Redo</button>
+        <button onClick={handleUndo} disabled={!store.history.canUndo}>Undo</button>
+        <button onClick={handleRedo} disabled={!store.history.canRedo}>Redo</button>
     </div>
   );
 }

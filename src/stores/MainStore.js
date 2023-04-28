@@ -11,8 +11,6 @@ export const MainStore = types
   })
   .actions(self => {
 
-    setHistoryManager (self)
-
     return {
       addBox(box) {
         self.boxes.push(box);
@@ -36,11 +34,6 @@ export const MainStore = types
         }
     }
   });
-
-  export let historyManager = {}
-  const setHistoryManager = (store) => {
-      historyManager = store.history
-  }
 
   let store = null
   if (localStorage.getItem (LOCALSTORAGE_ITEM_NAME)) {
