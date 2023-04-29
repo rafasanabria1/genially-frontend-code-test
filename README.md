@@ -62,3 +62,17 @@ If you have any questions about the test, you can contact any of us:
 - Julio (juboba@genially.com)
 
 Good Luck!
+
+
+# Code comments and decisions by Rafael Sanabria
+
+I've completed all the tasks requested in this technical test trying not to incorporate extra components and developing the new code in the most efficient way possible.
+
+As a personal preference, I've moved to the utils/const.js file some variables to set the size of the canvas and the size of the box, which are necessary in several parts of the code, such as to limit the final position of the drag event of the boxes.
+
+Also, I've changed the getRandomBox file to getRandom to generate a RandomBox every time the AddBox button is clicked. That randomBox has been modified to be generated at a random position too.
+
+I've implemented in the BoxStore the ability to select, move or change the color of a box, and in the MainStore the ability to move or change the color of selected boxes using the actions method.
+
+I've implemented in a single history step to do/undo the movement of the boxes, using the startGroup and stopGroup functions of the undoManager of mobx-state-tree intercepting the start and end events of interactjs.
+
